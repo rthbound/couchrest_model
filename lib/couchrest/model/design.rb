@@ -103,8 +103,7 @@ module CouchRest
           id += "_migration"
 
           # Delete current migration if there is one
-          old_migration = load_from_database(db, id)
-          db.delete_doc(old_migration) if old_migration
+          delete_migration(db, doc = nil, id)
 
           # Save new design doc
           new_doc = doc.merge(to_hash)
@@ -115,7 +114,8 @@ module CouchRest
           # Proc definition to copy the migration doc over the original
           cleanup = Proc.new do
             db.copy_doc(new_doc, doc)
-            db.delete_doc(new_doc)
+
+            delete_migration(db, new_doc)
             self
           end
 
@@ -125,16 +125,7 @@ module CouchRest
           result = :no_change
         end
 
-        if new_doc && !new_doc['views'].empty?
-          # Create a view query and send
-          name = new_doc['views'].keys.first
-          view = new_doc['views'][name]
-          params = {:limit => 1}
-          params[:reduce] = false if view['reduce']
-          db.view("#{id}/_view/#{name}", params) do |res|
-            # Block to use streamer!
-          end
-        end
+        send_view_query_to_doc(new_doc)
 
         # Provide the result in block
         yield result if block_given?
@@ -142,7 +133,7 @@ module CouchRest
         cleanup
       end
 
-      # Perform a single migration and inmediatly request a cleanup operation:
+      # Perform a single migration and immediatly request a cleanup operation:
       #
       #     print "Synchronising Cat model designs: "
       #     Cat.design_doc.migrate! do |res|
@@ -216,6 +207,24 @@ module CouchRest
         db.get(id)
       rescue RestClient::ResourceNotFound
         nil
+      end
+
+      def delete_migration(db, doc = nil, id = nil)
+        doc ||= load_from_database(db, id)
+        db.delete_doc(doc) if doc
+      end
+
+      def send_view_query_to_doc(doc)
+        if doc && !doc['views'].empty?
+          # Create a view query and send
+          name = doc['views'].keys.first
+          view = doc['views'][name]
+          params = {:limit => 1}
+          params[:reduce] = false if view['reduce']
+          db.view("#{id}/_view/#{name}", params) do |res|
+            # Block to use streamer!
+          end
+        end
       end
 
       # Calculate and update the checksum of the Design document.
