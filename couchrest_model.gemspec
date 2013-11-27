@@ -35,5 +35,6 @@ Gem::Specification.new do |s|
   #s.add_development_dependency("debugger", "~> 1.2.0") # TODO put in Gemfile
   #s.add_development_dependency(%q<oj>, "~> 1.3.4") # TODO put in Gemfile (fails in JRuby)
   s.add_development_dependency("kaminari", "~> 0.14.1")
+  s.add_development_dependency("coveralls")
   # s.add_development_dependency("jruby-openssl", ">= 0.7.3")
 end
