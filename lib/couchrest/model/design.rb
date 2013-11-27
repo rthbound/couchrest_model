@@ -103,7 +103,7 @@ module CouchRest
           id += "_migration"
 
           # Delete current migration if there is one
-          delete_migration(db, doc = nil, id)
+          delete_migration(db, nil, id)
 
           # Save new design doc
           new_doc = doc.merge(to_hash)
@@ -125,7 +125,7 @@ module CouchRest
           result = :no_change
         end
 
-        send_view_query_to_doc(new_doc)
+        send_view_query_to_doc(new_doc, id)
 
         # Provide the result in block
         yield result if block_given?
@@ -214,7 +214,7 @@ module CouchRest
         db.delete_doc(doc) if doc
       end
 
-      def send_view_query_to_doc(doc)
+      def send_view_query_to_doc(doc, id)
         if doc && !doc['views'].empty?
           # Create a view query and send
           name = doc['views'].keys.first
