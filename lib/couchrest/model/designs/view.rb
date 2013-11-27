@@ -257,11 +257,9 @@ module CouchRest
         # Descending is false by default, and this method cannot
         # be undone once used, it has no inverse option.
         def descending
-          if query[:startkey] || query[:endkey]
-            query[:startkey], query[:endkey] = query[:endkey], query[:startkey]
-          elsif query[:startkey_docid] || query[:endkey_docid]
-            query[:startkey_docid], query[:endkey_docid] = query[:endkey_docid], query[:startkey_docid]
-          end
+          swap(:startkey, :endkey) if query[:startkey] || query[:endkey]
+          swap(:startkey_docid, :endkey_docid) if query[:startkey_docid] || query[:endkey_docid]
+
           update_query(:descending => true)
         end
 
@@ -389,6 +387,10 @@ module CouchRest
         end
 
         protected
+
+        def swap(key1, key2)
+          query[key1], query[key2] = query[key2], query[key1]
+        end
 
         def include_docs!
           raise "Cannot include documents in view that has been reduced!" if query[:reduce]

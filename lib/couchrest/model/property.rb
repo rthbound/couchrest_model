@@ -18,7 +18,7 @@ module CouchRest::Model
     def to_s
       name
     end
-    
+
     def to_sym
       @_sym_name ||= name.to_sym
     end
@@ -27,9 +27,9 @@ module CouchRest::Model
     def cast(parent, value)
       return value unless casted
       if array
-        if value.nil?
-          value = []
-        elsif [Hash, HashWithIndifferentAccess].include?(value.class)
+        value ||= []
+
+        if [Hash, HashWithIndifferentAccess].include?(value.class)
           # Assume provided as a params hash where key is index
           value = parameter_hash_to_array(value)
         elsif !value.is_a?(Array)
