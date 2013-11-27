@@ -125,7 +125,7 @@ module CouchRest
           result = :no_change
         end
 
-        send_view_query_to_doc(new_doc, id)
+        send_view_query(new_doc, id, db)
 
         # Provide the result in block
         yield result if block_given?
@@ -214,7 +214,7 @@ module CouchRest
         db.delete_doc(doc) if doc
       end
 
-      def send_view_query_to_doc(doc, id)
+      def send_view_query(doc, id, db)
         if doc && !doc['views'].empty?
           # Create a view query and send
           name = doc['views'].keys.first
