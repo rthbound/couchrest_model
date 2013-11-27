@@ -238,11 +238,10 @@ module CouchRest
         # Get a deep copy of hash to compare with
         @_original_hash = Marshal.load(Marshal.dump(to_hash))
         # create a copy of basic elements
-        base = self.dup
-        base.delete('_id')
-        base.delete('_rev')
-        base.delete('couchrest-hash')
+        base = self.reject { |k,_| ['_id', '_rev', 'couchrest-hash'].include? k.to_s }
+
         result = nil
+
         flatten =
           lambda {|r|
             (recurse = lambda {|v|
