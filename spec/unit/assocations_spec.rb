@@ -29,7 +29,7 @@ describe "Assocations" do
       o = SaleInvoice.merge_assoc_opts(:cat)
       expect(o[:proxy]).to eql('self.company.cats')
     end
-    
+
   end
 
   describe "of type belongs to" do

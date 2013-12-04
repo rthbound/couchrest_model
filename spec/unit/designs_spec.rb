@@ -125,7 +125,7 @@ describe CouchRest::Model::Designs do
         doc = CouchRest::Document.new("_id" => "_design/#{id}")
         doc["language"] = "javascript"
         doc["views"] = {"all"     => {"map" => "function(doc) { if (doc['type'] == '#{id}') { emit(doc['_id'],1); } }"},
-                        "by_title" => {"map" => 
+                        "by_title" => {"map" =>
                                   "function(doc) {
                                      if ((doc['type'] == '#{id}') && (doc['title'] != null)) {
                                        emit(doc['title'], 1);
@@ -149,7 +149,6 @@ describe CouchRest::Model::Designs do
     describe "using views" do
 
       describe "to find a single item" do
-  
         before(:all) do
           reset_test_db!
           %w{aaa bbb ddd eee}.each do |title|
@@ -203,7 +202,7 @@ describe CouchRest::Model::Designs do
 
         before(:all) do
           reset_test_db!
-          @db = DB 
+          @db = DB
           %w{aaa bbb ddd eee}.each do |title|
             u = Unattached.new(:title => title)
             u.database = @db
@@ -272,7 +271,7 @@ describe CouchRest::Model::Designs do
         end
         it "should sort correctly" do
           articles = Article.by_user_id_and_date.all
-          expect(articles.collect{|a|a['user_id']}).to eq(['aaron', 'aaron', 'quentin', 
+          expect(articles.collect{|a|a['user_id']}).to eq(['aaron', 'aaron', 'quentin',
             'quentin'])
           expect(articles[1].title).to eq('not junk')
         end
@@ -282,10 +281,6 @@ describe CouchRest::Model::Designs do
           expect(articles[0].title).to eq("even more interesting")
         end
       end
-
-
     end
-
   end
-
 end

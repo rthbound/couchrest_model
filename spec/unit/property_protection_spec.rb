@@ -71,7 +71,7 @@ describe "Model Attributes" do
       expect(user.name).to eq("will")
       expect(user.admin).to eq(false)
     end
-    
+
     it "should provide correct accessible and protected property lists" do
       user = WithAccessible.new(:name => 'will', :admin => true)
       expect(user.accessible_properties.map{|p| p.to_s}).to eql(['name'])

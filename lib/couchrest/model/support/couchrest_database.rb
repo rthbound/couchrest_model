@@ -1,6 +1,6 @@
 #
 # Extend CouchRest's normal database delete! method to ensure any caches are
-# also emptied. Given that this is a rare event, and the consequences are not 
+# also emptied. Given that this is a rare event, and the consequences are not
 # very severe, we just completely empty the cache.
 #
 module CouchRest::Model

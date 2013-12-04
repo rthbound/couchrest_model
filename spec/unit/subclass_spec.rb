@@ -33,33 +33,33 @@ end
 class Dog < Animal; end
 
 describe "Subclassing a Model" do
-  
+
   before(:each) do
     @card = BusinessCard.new
   end
-  
+
   it "shouldn't messup the parent's properties" do
     expect(Card.properties).not_to eq(BusinessCard.properties)
   end
-  
+
   it "should share the same db default" do
     expect(@card.database.uri).to eq(Card.database.uri)
   end
-  
+
   it "should have kept the validation details" do
     expect(@card).not_to be_valid
   end
-  
+
   it "should have added the new validation details" do
     validated_fields = @card.class.validators.map{|v| v.attributes}.flatten
     expect(validated_fields).to include(:extension_code)
     expect(validated_fields).to include(:job_title)
   end
-  
+
   it "should not add to the parent's validations" do
     validated_fields = Card.validators.map{|v| v.attributes}.flatten
     expect(validated_fields).not_to include(:extension_code)
-    expect(validated_fields).not_to include(:job_title) 
+    expect(validated_fields).not_to include(:job_title)
   end
 
   it "should inherit default property values" do

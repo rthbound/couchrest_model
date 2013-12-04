@@ -13,7 +13,7 @@ module CouchrestModel
         return if class_path.empty?
         template 'module.rb', File.join('app/models', "#{class_path.join('/')}.rb") if behavior == :invoke
       end
-      
+
       hook_for :test_framework
 
       protected

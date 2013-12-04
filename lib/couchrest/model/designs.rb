@@ -30,7 +30,7 @@ module CouchRest
         # Adding a prefix allows you to associate multiple design documents with the same
         # model. This is useful if you'd like to split your designs into seperate
         # use cases; one for regular search functions and a second for stats for example.
-        # 
+        #
         #    # Create a design doc with id _design/Cats
         #    design do
         #      view :by_name
@@ -100,7 +100,7 @@ module CouchRest
         end
 
         def prepare_source_paths(options)
-          
+
         end
 
       end

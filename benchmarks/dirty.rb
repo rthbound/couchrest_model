@@ -8,7 +8,7 @@ require 'couchrest_model'
 
 class BenchmarkCasted < Hash
   include CouchRest::Model::CastedModel
-  
+
   property :name
 end
 
@@ -86,11 +86,11 @@ def run_benchmark
     if ENV['BENCHMARK_DB']
       # db writing
       x.report("write changed record to db") do
-        db_n.times { |i| b.string = "test#{i}"; b.save }  
+        db_n.times { |i| b.string = "test#{i}"; b.save }
       end
 
       x.report("write unchanged record to db") do
-        db_n.times { b.save }  
+        db_n.times { b.save }
       end
 
       # db reading

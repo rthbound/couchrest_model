@@ -987,10 +987,7 @@ describe "Design View" do
         expect(obj.model).not_to receive(:get)
         expect(obj.doc).to be_nil
       end
-
-
     end
-
   end
 
 

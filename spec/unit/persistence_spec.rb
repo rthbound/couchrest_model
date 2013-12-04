@@ -44,13 +44,13 @@ describe CouchRest::Model::Persistence do
       expect(saved_obj.set_by_proc).to be_an_instance_of(Time)
     end
   end
- 
+
   describe "creating a model" do
 
     before(:each) do
       @sobj = Basic.new
     end
-   
+
     it "should accept true or false on save for validation" do
       expect(@sobj).to receive(:valid?)
       @sobj.save(true)
@@ -75,22 +75,22 @@ describe CouchRest::Model::Persistence do
       article = Article.create(:title => 'my test')
       expect(article.title).to eq('my test')
       expect(article).not_to be_new
-    end 
-    
+    end
+
     it "yields new instance to block before saving (#create)" do
       article = Article.create{|a| a.title = 'my create init block test'}
       expect(article.title).to eq('my create init block test')
       expect(article).not_to be_new
-    end 
+    end
 
     it "yields new instance to block before saving (#create!)" do
       article = Article.create{|a| a.title = 'my create bang init block test'}
       expect(article.title).to eq('my create bang init block test')
       expect(article).not_to be_new
-    end 
+    end
 
     it "should trigger the create callbacks" do
-      doc = WithCallBacks.create(:name => 'my other test') 
+      doc = WithCallBacks.create(:name => 'my other test')
       expect(doc.run_before_create).to be_truthy
       expect(doc.run_after_create).to be_truthy
       expect(doc.run_before_save).to be_truthy
@@ -104,23 +104,23 @@ describe CouchRest::Model::Persistence do
       @sobj = Basic.new
       expect(@sobj.save).to be_truthy
     end
-    
+
     it "should save the doc" do
       doc = Basic.get(@sobj.id)
       expect(doc['_id']).to eq(@sobj.id)
     end
-    
+
     it "should be set for resaving" do
       rev = @obj.rev
       @sobj['another-key'] = "some value"
       @sobj.save
       expect(@sobj.rev).not_to eq(rev)
     end
-    
+
     it "should set the id" do
       expect(@sobj.id).to be_an_instance_of(String)
     end
-    
+
     it "should set the type" do
       expect(@sobj[@sobj.model_type_key]).to eq('Basic')
     end
@@ -146,15 +146,15 @@ describe CouchRest::Model::Persistence do
     end
 
     describe "save!" do
-      
+
       before(:each) do
         @sobj = Card.new(:first_name => "Marcos", :last_name => "Tapajós")
       end
-      
+
       it "should return true if save the document" do
         expect(@sobj.save!).to be_truthy
       end
-      
+
       it "should raise error if don't save the document" do
         @sobj.first_name = nil
         expect { @sobj.save! }.to raise_error(CouchRest::Model::Errors::Validations)
@@ -162,25 +162,25 @@ describe CouchRest::Model::Persistence do
 
     end
   end
-  
+
   describe "saving a model with a unique_id configured" do
     before(:each) do
       @art = Article.new
       @old = Article.database.get('this-is-the-title') rescue nil
       Article.database.delete_doc(@old) if @old
     end
-    
+
     it "should be a new document" do
       expect(@art).to be_new
       expect(@art.title).to be_nil
     end
-    
+
     it "should require the title" do
       expect{@art.save}.to raise_error(/unique_id cannot be nil/)
       @art.title = 'This is the title'
       expect(@art.save).to be_truthy
     end
-    
+
     it "should not change the slug on update" do
       @art.title = 'This is the title'
       expect(@art.save).to be_truthy
@@ -188,20 +188,20 @@ describe CouchRest::Model::Persistence do
       expect(@art.save).to be_truthy
       expect(@art.slug).to eq('this-is-the-title')
     end
-    
+
     it "should raise an error when the slug is taken" do
       @art.title = 'This is the title'
       expect(@art.save).to be_truthy
       @art2 = Article.new(:title => 'This is the title!')
       expect{@art2.save}.to raise_error(/409 Conflict/)
     end
-    
+
     it "should set the slug" do
       @art.title = 'This is the title'
       expect(@art.save).to be_truthy
       expect(@art.slug).to eq('this-is-the-title')
     end
-    
+
     it "should set the id" do
       @art.title = 'This is the title'
       expect(@art.save).to be_truthy
@@ -215,20 +215,20 @@ describe CouchRest::Model::Persistence do
       @old = WithTemplateAndUniqueID.get('very-important') rescue nil
       @old.destroy if @old
     end
-    
+
     it "should require the field" do
       expect{@templated.save}.to raise_error(/unique_id cannot be nil/)
       @templated['slug'] = 'very-important'
       expect(@templated.save).to be_truthy
     end
-    
+
     it "should save with the id" do
       @templated['slug'] = 'very-important'
       expect(@templated.save).to be_truthy
       t = WithTemplateAndUniqueID.get('very-important')
       expect(t).to eq(@templated)
     end
-    
+
     it "should not change the id on update" do
       @templated['slug'] = 'very-important'
       expect(@templated.save).to be_truthy
@@ -237,13 +237,13 @@ describe CouchRest::Model::Persistence do
       t = WithTemplateAndUniqueID.get('very-important')
       expect(t.id).to eq(@templated.id)
     end
-    
+
     it "should raise an error when the id is taken" do
       @templated['slug'] = 'very-important'
       expect(@templated.save).to be_truthy
       expect{WithTemplateAndUniqueID.new('slug' => 'very-important').save}.to raise_error(/409 Conflict/)
     end
-    
+
     it "should set the id" do
       @templated['slug'] = 'very-important'
       expect(@templated.save).to be_truthy
@@ -298,7 +298,7 @@ describe CouchRest::Model::Persistence do
     it "should return nil if `get` is used and the document doesn't exist" do
       foundart = Article.get 'matt aimonetti'
       expect(foundart).to be_nil
-    end                     
+    end
     it "should return nil if a blank id is requested" do
       expect(Article.get("")).to be_nil
     end
@@ -347,11 +347,11 @@ describe CouchRest::Model::Persistence do
   end
 
   describe "callbacks" do
-    
+
     before(:each) do
       @doc = WithCallBacks.new
     end
-    
+
     describe "validation" do
       it "should run before_validation before validating" do
         expect(@doc.run_before_validation).to be_nil
@@ -434,26 +434,28 @@ describe CouchRest::Model::Persistence do
       end
     end
     describe "update" do
-      
+
       before(:each) do
         @doc.save
-      end      
+      end
+
       it "should run the before update filter when updating an existing document" do
         expect(@doc.run_before_update).to be_nil
         @doc.update
         expect(@doc.run_before_update).to be_truthy
       end
+
       it "should run the after update filter when updating an existing document" do
         expect(@doc.run_after_update).to be_nil
         @doc.update
         expect(@doc.run_after_update).to be_truthy
       end
+
       it "should run the before update filter when saving an existing document" do
         expect(@doc.run_before_update).to be_nil
         @doc.save
         expect(@doc.run_before_update).to be_truthy
       end
-      
     end
   end
 

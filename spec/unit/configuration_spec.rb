@@ -18,13 +18,12 @@ describe CouchRest::Model::Configuration do
   end
 
   describe '.add_config' do
-    
     it "should add a class level accessor" do
       @class.add_config :foo_bar
       @class.foo_bar = 'foo'
       expect(@class.foo_bar).to eq('foo')
     end
-    
+
     ['foo', :foo, 45, ['foo', :bar]].each do |val|
       it "should be inheritable for a #{val.class}" do
         @class.add_config :foo_bar
@@ -40,14 +39,13 @@ describe CouchRest::Model::Configuration do
         expect(@class.foo_bar).to eq(val)
       end
     end
-    
-    
+
     it "should add an instance level accessor" do
       @class.add_config :foo_bar
       @class.foo_bar = 'foo'
       expect(@class.new.foo_bar).to eq('foo')
     end
-    
+
     it "should add a convenient in-class setter" do
       @class.add_config :foo_bar
       @class.foo_bar "monkey"
@@ -73,5 +71,4 @@ describe CouchRest::Model::Configuration do
       expect(cat.model_type_key).to eql('cat-type')
     end
   end
-
 end

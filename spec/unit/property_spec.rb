@@ -13,7 +13,7 @@ describe CouchRest::Model::Property do
     expect(property.to_s).to eql('test')
   end
 
-  it "should provide name as a symbol" do 
+  it "should provide name as a symbol" do
     property = CouchRest::Model::Property.new(:test, :type => String)
     expect(property.name.to_sym).to eql(:test)
     expect(property.to_sym).to eql(:test)

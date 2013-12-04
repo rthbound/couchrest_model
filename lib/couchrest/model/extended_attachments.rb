@@ -12,7 +12,7 @@ module CouchRest
       rescue ArgumentError
         raise ArgumentError, 'You must specify :file and :name'
       end
-      
+
       # return all attachments
       def attachments
         self['_attachments'] ||= {}
@@ -51,15 +51,15 @@ module CouchRest
         return unless has_attachment?(attachment_name)
         "#{database.root}/#{self.id}/#{attachment_name}"
       end
-      
+
       # returns URI to fetch the attachment from
       def attachment_uri(attachment_name)
         return unless has_attachment?(attachment_name)
         "#{database.uri}/#{self.id}/#{attachment_name}"
       end
-      
+
       private
-      
+
         def get_mime_type(path)
           return nil if path.nil?
           type = ::MIME::Types.type_for(path)
@@ -75,7 +75,7 @@ module CouchRest
             'data'         => args[:file].read
           }
         end
-      
+
     end # module ExtendedAttachments
   end
 end

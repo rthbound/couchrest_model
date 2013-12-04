@@ -2,23 +2,23 @@
 require "spec_helper"
 
 describe "Model Base" do
-  
+
   before(:each) do
     @obj = WithDefaultValues.new
   end
-  
+
   describe "instance database connection" do
     it "should use the default database" do
       expect(@obj.database.name).to eq('couchrest-model-test')
     end
-    
+
     it "should override the default db" do
       @obj.database = TEST_SERVER.database!('couchrest-extendedmodel-test')
       expect(@obj.database.name).to eql 'couchrest-extendedmodel-test'
       @obj.database.delete!
     end
   end
-  
+
   describe "a new model" do
     it "should be a new document" do
       @obj = Basic.new
@@ -38,7 +38,7 @@ describe "Model Base" do
       expect(@obj.database).to eql('database')
     end
 
-    it "should support initialization block" do 
+    it "should support initialization block" do
       @obj = Basic.new {|b| b.database = 'database'}
       expect(@obj.database).to eql('database')
     end
@@ -84,7 +84,7 @@ describe "Model Base" do
 
   describe "ActiveModel compatability Basic" do
 
-    before(:each) do 
+    before(:each) do
       @obj = Basic.new(nil)
     end
 
@@ -128,10 +128,10 @@ describe "Model Base" do
       context "when the document is not new" do
         it "returns id" do
           @obj.save
-          expect(@obj.persisted?).to be_truthy 
+          expect(@obj.persisted?).to be_truthy
         end
       end
-      
+
       context "when the document is destroyed" do
         it "returns false" do
           @obj.save
@@ -234,7 +234,7 @@ describe "Model Base" do
       @art.attributes = {'date' => Time.now, :title => "something else"}
       expect(@art['title']).to eql("something else")
     end
-    
+
     it "should not flip out if an attribute= method is missing and ignore it" do
       expect {
         @art.attributes = {'slug' => "new-slug", :title => "super danger"}
@@ -244,7 +244,7 @@ describe "Model Base" do
 
     #it "should not change other attributes if there is an error" do
     #  lambda {
-    #    @art.update_attributes_without_saving('slug' => "new-slug", :title => "super danger")        
+    #    @art.update_attributes_without_saving('slug' => "new-slug", :title => "super danger")
     #  }.should raise_error
     #  @art['title'].should == "big bad danger"
     #end
@@ -273,13 +273,13 @@ describe "Model Base" do
     it "should have the default false value explicitly assigned" do
       expect(@obj.default_false).to eq(false)
     end
-    
+
     it "should automatically call a proc default at initialization" do
       expect(@obj.set_by_proc).to be_an_instance_of(Time)
       expect(@obj.set_by_proc).to eq(@obj.set_by_proc)
       expect(@obj.set_by_proc.utc).to be < Time.now.utc
     end
-    
+
     it "should let you overwrite the default values" do
       obj = WithDefaultValues.new(:preset => 'test')
       obj.preset = 'test'
@@ -292,12 +292,12 @@ describe "Model Base" do
       another = WithDefaultValues.new
       expect(another.preset).to eq({:right => 10, :top_align => false})
     end
-    
+
     it "should work with a default empty array" do
       obj = WithDefaultValues.new(:tags => ['spec'])
       expect(obj.tags).to eq(['spec'])
     end
-    
+
     it "should set default value of read-only property" do
       obj = WithDefaultValues.new
       expect(obj.read_only_with_default).to eq('generic')
@@ -315,7 +315,7 @@ describe "Model Base" do
       expect(obj.tags).to eq(['spec'])
     end
   end
-  
+
   describe "a doc with template values (CR::Model spec)" do
     before(:all) do
       WithTemplateAndUniqueID.all.map{|o| o.destroy}
@@ -336,8 +336,7 @@ describe "Model Base" do
       expect(tmpl2_reloaded.preset).to eq('not_value')
     end
   end
-  
-  
+
   describe "finding all instances of a model" do
     before(:all) do
       WithTemplateAndUniqueID.all.map{|o| o.destroy}
@@ -348,11 +347,11 @@ describe "Model Base" do
       WithTemplateAndUniqueID.new('slug' => '4').save
     end
     it "should find all" do
-      rs = WithTemplateAndUniqueID.all 
+      rs = WithTemplateAndUniqueID.all
       expect(rs.length).to eq(4)
     end
   end
-  
+
   describe "counting all instances of a model" do
     before(:each) do
       reset_test_db!
@@ -369,9 +368,9 @@ describe "Model Base" do
       expect(WithTemplateAndUniqueID.count).to eq(3)
     end
   end
-  
+
   describe "finding the first instance of a model" do
-    before(:each) do      
+    before(:each) do
       reset_test_db!
       WithTemplateAndUniqueID.new('slug' => '1').save
       WithTemplateAndUniqueID.new('slug' => '2').save
@@ -388,7 +387,7 @@ describe "Model Base" do
     end
   end
 
-  
+
   describe "getting a model with a subobject field" do
     before(:all) do
       course_doc = {
@@ -411,7 +410,7 @@ describe "Model Base" do
       expect(@course['ends_at']).to eq(Time.parse("2008/12/19 13:00:00 +0800"))
     end
   end
-  
+
   describe "timestamping" do
     before(:each) do
       oldart = Article.get "saving-this" rescue nil
@@ -419,7 +418,7 @@ describe "Model Base" do
       @art = Article.new(:title => "Saving this")
       @art.save
     end
-    
+
     it "should define the updated_at and created_at getters and set the values" do
       @obj.save
       json = @obj.to_json
@@ -429,15 +428,15 @@ describe "Model Base" do
       expect(obj.updated_at).to be_an_instance_of(Time)
       expect(obj.created_at.to_s).to eq(@obj.updated_at.to_s)
     end
-    
+
     it "should not change created_at on update" do
-      2.times do 
+      2.times do
         expect do
           @art.save
         end.not_to change(@art, :created_at)
       end
     end
-     
+
     it "should set the time on create" do
       expect(Time.now - @art.created_at).to be < 2
       foundart = Article.get @art.id
@@ -450,7 +449,7 @@ describe "Model Base" do
       expect(@art.created_at).to be < @art.updated_at
     end
   end
-  
+
   describe "getter and setter methods" do
     it "should try to call the arg= method before setting :arg in the hash" do
       @doc = WithGetterAndSetterMethods.new(:arg => "foo")
@@ -465,35 +464,35 @@ describe "Model Base" do
       reset_test_db!
       @cat = Cat.new(:name => 'Sockington')
     end
-    
+
     it "should not save if a nested casted model is invalid" do
       @cat.favorite_toy = CatToy.new
       expect(@cat).not_to be_valid
       expect(@cat.save).to be_falsey
       expect{@cat.save!}.to raise_error(/Validation Failed/)
     end
-    
+
     it "should save when nested casted model is valid" do
       @cat.favorite_toy = CatToy.new(:name => 'Squeaky')
       expect(@cat).to be_valid
       expect(@cat.save).to be_truthy
       expect{@cat.save!}.not_to raise_error
     end
-    
+
     it "should not save when nested collection contains an invalid casted model" do
       @cat.toys = [CatToy.new(:name => 'Feather'), CatToy.new]
       expect(@cat).not_to be_valid
       expect(@cat.save).to be_falsey
       expect{@cat.save!}.to raise_error(/Validation Failed/)
     end
-    
+
     it "should save when nested collection contains valid casted models" do
       @cat.toys = [CatToy.new(:name => 'feather'), CatToy.new(:name => 'ball-o-twine')]
       expect(@cat).to be_valid
       expect(@cat.save).to be_truthy
       expect{@cat.save!}.not_to raise_error
     end
-    
+
     it "should not fail if the nested casted model doesn't have validation" do
       Cat.property :trainer, Person
       Cat.validates_presence_of :name

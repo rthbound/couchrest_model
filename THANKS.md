@@ -2,7 +2,7 @@ CouchRest THANKS
 =====================
 
 CouchRest was originally developed by J. Chris Anderson <jchris@grabb.it>
-and a number of other contributors. Many people further contributed to 
+and a number of other contributors. Many people further contributed to
 CouchRest by reporting problems, suggesting various improvements or submitting
 changes. A list of these people is included below.
 
@@ -15,7 +15,7 @@ changes. A list of these people is included below.
  * [Marcos Tapajós](http://tapajos.me)
  * [Sam Lown](http://github.com/samlown)
  * [Will Leinweber](http://github.com/will)
- 
+
 Patches are welcome. The primary source for this software project is [on Github](http://github.com/couchrest/couchrest)
 
 A lot of people have active forks - thank you all - even the patches I don't end up using are helpful.

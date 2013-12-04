@@ -57,7 +57,7 @@ class Basic < CouchRest::Model::Base
 end
 
 def reset_test_db!
-  DB.recreate! rescue nil 
+  DB.recreate! rescue nil
   # Reset the Design Cache
   Thread.current[:couchrest_design_cache] = {}
   DB

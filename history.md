@@ -86,10 +86,10 @@
   * Support typecasting `Symbol`
   * Added `:array` option to properties
   * Typecasting Dates, Times, and Booleans, with invalid values returns nil
-  
+
   * API Breaking Changes
     * Properties with blocks are now singular unless the `array: true` option is passed.
-  
+
 
 ## 1.2.0.beta - 2012-06-08
 
@@ -217,7 +217,7 @@ Notes:
 ## CouchRest Model 1.0.0.beta8
 
 * Major enhancements
-	* Added model generator
+  * Added model generator
 
 * Minor enhancements
   * Raise error on adding objects to "collection_of" without an id

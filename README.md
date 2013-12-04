@@ -109,7 +109,7 @@ $ rails generate couchrest_model:config
 $ rails generate model person --orm=couchrest_model
 ```
 
-## General Usage 
+## General Usage
 
 ```ruby
 require 'couchrest_model'

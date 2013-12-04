@@ -18,7 +18,7 @@ module CouchRest::Model
     def to_s
       name
     end
-    
+
     def to_sym
       @_sym_name ||= name.to_sym
     end
@@ -65,7 +65,7 @@ module CouchRest::Model
     end
 
     # Initialize a new instance of a property's type ready to be
-    # used. If a proc is defined for the init method, it will be used instead of 
+    # used. If a proc is defined for the init method, it will be used instead of
     # a normal call to the class.
     def build(*args)
       raise StandardError, "Cannot build property without a class" if @type.nil?

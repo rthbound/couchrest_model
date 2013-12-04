@@ -100,7 +100,7 @@ module CouchRest
             multi_parameter_attributes << [ key, value ]
             false
           elsif self.respond_to?("#{key}=")
-            self.send("#{key}=", value) 
+            self.send("#{key}=", value)
           elsif mass_assign || mass_assign_any_attribute
             self[key] = value
           end
@@ -131,7 +131,7 @@ module CouchRest
       def execute_callstack_for_multiparameter_attributes(callstack, hash)
         callstack.each do |name, values_with_empty_parameters|
           if self.respond_to?("#{name}=")
-            casted_attrib = send("#{name}=", values_with_empty_parameters) 
+            casted_attrib = send("#{name}=", values_with_empty_parameters)
             unless casted_attrib.is_a?(Hash)
               hash.reject { |key, value| key.include?(name.to_s)}
             end
@@ -177,7 +177,7 @@ module CouchRest
 
         # Automatically set <tt>updated_at</tt> and <tt>created_at</tt> fields
         # on the document whenever saving occurs.
-        # 
+        #
         # These properties are casted as Time objects, so they should always
         # be set to UTC.
         def timestamps!

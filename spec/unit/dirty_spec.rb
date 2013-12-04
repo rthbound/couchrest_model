@@ -5,7 +5,7 @@ class WithCastedModelMixin
   property :name
   property :details, Object, :default => {}
   property :casted_attribute, WithCastedModelMixin
-end 
+end
 
 class DirtyModel < CouchRest::Model::Base
   use_database DB
